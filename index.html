@@ -73,6 +73,7 @@
         .nav-links {
             display: flex;
             gap: 30px;
+            align-items: center;
         }
 
         .nav-links a {
@@ -101,6 +102,34 @@
 
         .nav-links a:hover::after {
             width: 100%;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 5px;
+            margin-left: 20px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--gray-800);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            color: var(--accent);
+            background: rgba(255, 51, 102, 0.1);
+        }
+
+        .lang-btn:hover:not(.active) {
+            color: var(--primary);
+            background: var(--gray-200);
         }
 
         .nav-actions {
@@ -409,6 +438,125 @@
             margin-bottom: 20px;
         }
 
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1100;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--secondary);
+            border-radius: 20px;
+            max-width: 800px;
+            margin: 50px auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalFadeIn 0.4s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-800);
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--accent);
+        }
+
+        .modal-body {
+            padding: 20px 30px 30px;
+        }
+
+        .modal-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .modal-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-feature i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .modal-examples {
+            margin: 30px 0;
+        }
+
+        .modal-examples h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .example-item {
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .example-item:hover {
+            background: var(--gray-200);
+            transform: translateY(-5px);
+        }
+
+        .example-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
         /* Процесс работы */
         .process-steps {
             display: grid;
@@ -664,6 +812,10 @@
             .footer-content {
                 grid-template-columns: 1fr 1fr;
             }
+            
+            .modal-content {
+                margin: 20px auto;
+            }
         }
 
         @media (max-width: 768px) {
@@ -691,6 +843,18 @@
             .footer-content {
                 grid-template-columns: 1fr;
             }
+            
+            .modal-header {
+                padding: 20px 20px 0;
+            }
+            
+            .modal-body {
+                padding: 15px 20px 20px;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 480px) {
@@ -709,6 +873,10 @@
             .contact-form {
                 padding: 25px;
             }
+            
+            .language-switcher {
+                margin-left: 10px;
+            }
         }
     </style>
 </head>
@@ -720,15 +888,20 @@
                 <a href="#" class="logo">Максим<span>.</span></a>
                 
                 <div class="nav-links">
-                    <a href="#home">Главная</a>
-                    <a href="#about">Обо мне</a>
-                    <a href="#services">Услуги</a>
-                    <a href="#process">Процесс</a>
-                    <a href="#contact">Контакты</a>
+                    <a href="#home" data-key="nav.home">Главная</a>
+                    <a href="#about" data-key="nav.about">Обо мне</a>
+                    <a href="#services" data-key="nav.services">Услуги</a>
+                    <a href="#process" data-key="nav.process">Процесс</a>
+                    <a href="#contact" data-key="nav.contact">Контакты</a>
+                    
+                    <div class="language-switcher">
+                        <button class="lang-btn active" data-lang="ru">RU</button>
+                        <button class="lang-btn" data-lang="en">EN</button>
+                    </div>
                 </div>
                 
                 <div class="nav-actions">
-                    <button class="btn btn-primary" id="contactBtn">
+                    <button class="btn btn-primary" id="contactBtn" data-key="nav.cta">
                         <i class="fas fa-paper-plane"></i> Начать проект
                     </button>
                 </div>
@@ -740,15 +913,15 @@
     <section class="hero" id="home">
         <div class="container">
             <div class="hero-content animate-fadeIn">
-                <div class="hero-badge">ВЕБ-РАЗРАБОТЧИК</div>
-                <h1>Создаю сайты, которые <span>продают</span> и <span>конвертируют</span></h1>
-                <p>Превращаю посетителей в клиентов с помощью современных технологий и психологии продаж. Ваш бизнес заслуживает сайта, который работает 24/7.</p>
+                <div class="hero-badge" data-key="hero.badge">ВЕБ-РАЗРАБОТЧИК</div>
+                <h1 data-key="hero.title">Создаю сайты, которые <span data-key="hero.highlight1">продают</span> и <span data-key="hero.highlight2">конвертируют</span></h1>
+                <p data-key="hero.subtitle">Превращаю посетителей в клиентов с помощью современных технологий и психологии продаж. Ваш бизнес заслуживает сайта, который работает 24/7.</p>
                 <div class="hero-btns">
-                    <button class="btn btn-primary" id="heroContactBtn">
+                    <button class="btn btn-primary" id="heroContactBtn" data-key="hero.cta1">
                         <i class="fas fa-bolt"></i> Обсудить проект
                     </button>
                     <button class="btn btn-outline" id="portfolioBtn">
-                        <i class="fas fa-eye"></i> Смотреть работы
+                        <i class="fas fa-eye"></i> <span data-key="hero.cta2">Смотреть работы</span>
                     </button>
                 </div>
             </div>
@@ -759,25 +932,25 @@
     <section id="about">
         <div class="container">
             <div class="section-header">
-                <h2>Почему выбирают меня</h2>
-                <p>Не просто разработка, а стратегическое партнерство для роста вашего бизнеса</p>
+                <h2 data-key="about.title">Почему выбирают меня</h2>
+                <p data-key="about.subtitle">Не просто разработка, а стратегическое партнерство для роста вашего бизнеса</p>
             </div>
             
             <div class="about-content">
                 <div class="about-text">
-                    <h3>Максим - веб-разработчик, который понимает бизнес</h3>
-                    <p>Я создаю не просто красивые сайты, а эффективные инструменты продаж. Каждый проект - это результат глубокого анализа вашей целевой аудитории и конкурентов.</p>
-                    <p>Использую современный стек технологий: <strong>HTML5, CSS3, JavaScript, SQL</strong> - чтобы ваш сайт был быстрым, безопасным и адаптивным на всех устройствах.</p>
-                    <p>Мой подход основан на принципах из лучших книг по продажам и маркетингу. Я знаю, как заставить сайт работать на вас, а не просто быть "визиткой в интернете".</p>
+                    <h3 data-key="about.heading">Максим - веб-разработчик, который понимает бизнес</h3>
+                    <p data-key="about.text1">Я создаю не просто красивые сайты, а эффективные инструменты продаж. Каждый проект - это результат глубокого анализа вашей целевой аудитории и конкурентов.</p>
+                    <p data-key="about.text2">Использую современный стек технологий: <strong>HTML5, CSS3, JavaScript, SQL</strong> - чтобы ваш сайт был быстрым, безопасным и адаптивным на всех устройствах.</p>
+                    <p data-key="about.text3">Мой подход основан на принципах из лучших книг по продажам и маркетингу. Я знаю, как заставить сайт работать на вас, а не просто быть "визиткой в интернете".</p>
                     
                     <div class="skills">
                         <div class="skill-tag">HTML5</div>
                         <div class="skill-tag">CSS3</div>
                         <div class="skill-tag">JavaScript</div>
                         <div class="skill-tag">SQL</div>
-                        <div class="skill-tag">Адаптивный дизайн</div>
+                        <div class="skill-tag" data-key="skills.responsive">Адаптивный дизайн</div>
                         <div class="skill-tag">UI/UX</div>
-                        <div class="skill-tag">Конверсия</div>
+                        <div class="skill-tag" data-key="skills.conversion">Конверсия</div>
                         <div class="skill-tag">SEO</div>
                     </div>
                 </div>
@@ -788,27 +961,27 @@
                             <div class="avatar">М</div>
                             <div>
                                 <h3>Максим Bold</h3>
-                                <p>Веб-разработчик</p>
+                                <p data-key="about.role">Веб-разработчик</p>
                             </div>
                         </div>
-                        <p>"Моя цель - не просто написать код, а решить вашу бизнес-задачу. Каждый сайт должен приносить результат."</p>
+                        <p data-key="about.quote">"Моя цель - не просто написать код, а решить вашу бизнес-задачу. Каждый сайт должен приносить результат."</p>
                         
                         <div class="card-stats">
                             <div class="stat">
                                 <div class="stat-value">24/7</div>
-                                <div class="stat-label">Ваш сайт работает</div>
+                                <div class="stat-label" data-key="stats.availability">Ваш сайт работает</div>
                             </div>
                             <div class="stat">
                                 <div class="stat-value">100%</div>
-                                <div class="stat-label">Адаптивность</div>
+                                <div class="stat-label" data-key="stats.responsive">Адаптивность</div>
                             </div>
                             <div class="stat">
                                 <div class="stat-value">+30%</div>
-                                <div class="stat-label">Конверсия в среднем</div>
+                                <div class="stat-label" data-key="stats.conversion">Конверсия в среднем</div>
                             </div>
                             <div class="stat">
                                 <div class="stat-value">0</div>
-                                <div class="stat-label">Проблем с безопасностью</div>
+                                <div class="stat-label" data-key="stats.security">Проблем с безопасностью</div>
                             </div>
                         </div>
                     </div>
@@ -821,71 +994,255 @@
     <section class="services" id="services">
         <div class="container">
             <div class="section-header">
-                <h2>Что я предлагаю</h2>
-                <p>Комплексные решения для вашего цифрового присутствия</p>
+                <h2 data-key="services.title">Что я предлагаю</h2>
+                <p data-key="services.subtitle">Комплексные решения для вашего цифрового присутствия</p>
             </div>
             
             <div class="services-grid">
+                <!-- Лендинг -->
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-laptop-code"></i>
                     </div>
-                    <h3>Лендинг "Под ключ"</h3>
-                    <p>Одностраничный сайт, который превращает посетителей в клиентов. Идеально для запуска продукта, акции или услуги.</p>
-                    <div class="service-price">от 3500 ₽</div>
-                    <button class="btn btn-outline">Подробнее</button>
+                    <h3 data-key="services.landing.title">Лендинг "Под ключ"</h3>
+                    <p data-key="services.landing.description">Одностраничный сайт, который превращает посетителей в клиентов. Идеально для запуска продукта, акции или услуги.</p>
+                    <div class="service-price" data-key="services.landing.price">от 3 000 ₽</div>
+                    <button class="btn btn-outline service-detail-btn" data-service="landing" data-key="services.detail">
+                        Подробнее
+                    </button>
                 </div>
                 
+                <!-- Интернет-магазин -->
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-shopping-cart"></i>
                     </div>
-                    <h3>Интернет-магазин</h3>
-                    <p>Полнофункциональная платформа для онлайн-продаж с удобной административной панелью и системой управления товарами.</p>
-                    <div class="service-price">от 40000 ₽</div>
-                    <button class="btn btn-outline">Подробнее</button>
+                    <h3 data-key="services.ecommerce.title">Интернет-магазин</h3>
+                    <p data-key="services.ecommerce.description">Полнофункциональная платформа для онлайн-продаж с удобной административной панелью и системой управления товарами.</p>
+                    <div class="service-price" data-key="services.ecommerce.price">от 15 000 ₽</div>
+                    <button class="btn btn-outline service-detail-btn" data-service="ecommerce" data-key="services.detail">
+                        Подробнее
+                    </button>
                 </div>
                 
+                <!-- Корпоративный сайт -->
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-building"></i>
                     </div>
-                    <h3>Корпоративный сайт</h3>
-                    <p>Представительство вашей компании в интернете с системой управления контентом и современным дизайном.</p>
-                    <div class="service-price">от 25 000 ₽</div>
-                    <button class="btn btn-outline">Подробнее</button>
+                    <h3 data-key="services.corporate.title">Корпоративный сайт</h3>
+                    <p data-key="services.corporate.description">Представительство вашей компании в интернете с системой управления контентом и современным дизайном.</p>
+                    <div class="service-price" data-key="services.corporate.price">от 10 000 ₽</div>
+                    <button class="btn btn-outline service-detail-btn" data-service="corporate" data-key="services.detail">
+                        Подробнее
+                    </button>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Модальные окна для услуг -->
+    <!-- Лендинг -->
+    <div class="modal" id="landing-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 data-key="modals.landing.title">Лендинг "Под ключ"</h2>
+                    <p data-key="modals.landing.subtitle">Одностраничный сайт для эффективных продаж</p>
+                </div>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p data-key="modals.landing.description">Лендинг — это специализированная страница, созданная для конкретного предложения. Она направляет внимание посетителя на одно целевое действие: заявку, покупку, регистрацию.</p>
+                
+                <div class="modal-features">
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.landing.feature1">Адаптивный дизайн</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.landing.feature2">SEO-оптимизация</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.landing.feature3">Формы обратной связи</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.landing.feature4">Интеграция с CRM</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.landing.feature5">Аналитика и метрики</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.landing.feature6">Гарантия 1 год</span>
+                    </div>
+                </div>
+                
+                <div class="modal-examples">
+                    <h3 data-key="modals.examples">Примеры работ</h3>
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <div class="example-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div data-key="modals.landing.example1">Бизнес-услуги</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div data-key="modals.landing.example2">Образование</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div data-key="modals.landing.example3">Медицина</div>
+                        </div>
+                        <div class="example-item">
+                            <div class="example-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div data-key="modals.landing.example4">Недвижимость</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-primary" data-key="modals.cta1">Обсудить проект</button>
+                    <button class="btn btn-outline modal-close" data-key="modals.cta2">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Интернет-магазин -->
+    <div class="modal" id="ecommerce-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 data-key="modals.ecommerce.title">Интернет-магазин</h2>
+                    <p data-key="modals.ecommerce.subtitle">Полнофункциональная платформа для онлайн-продаж</p>
+                </div>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p data-key="modals.ecommerce.description">Современный интернет-магазин с системой управления товарами, корзиной, оформлением заказов и интеграцией с платежными системами.</p>
+                
+                <div class="modal-features">
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.ecommerce.feature1">Каталог товаров</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.ecommerce.feature2">Корзина и оформление</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.ecommerce.feature3">Платежные системы</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.ecommerce.feature4">Управление заказами</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.ecommerce.feature5">Личный кабинет</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.ecommerce.feature6">Админ-панель</span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-primary" data-key="modals.cta1">Обсудить проект</button>
+                    <button class="btn btn-outline modal-close" data-key="modals.cta2">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Корпоративный сайт -->
+    <div class="modal" id="corporate-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 data-key="modals.corporate.title">Корпоративный сайт</h2>
+                    <p data-key="modals.corporate.subtitle">Представительство вашей компании в интернете</p>
+                </div>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p data-key="modals.corporate.description">Многостраничный сайт для представления компании, её услуг, команды и проектов. С системой управления контентом для самостоятельного обновления информации.</p>
+                
+                <div class="modal-features">
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.corporate.feature1">О компании</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.corporate.feature2">Услуги/продукты</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.corporate.feature3">Блог/новости</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.corporate.feature4">Контакты и карта</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.corporate.feature5">Система управления</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-key="modals.corporate.feature6">Мультиязычность</span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-primary" data-key="modals.cta1">Обсудить проект</button>
+                    <button class="btn btn-outline modal-close" data-key="modals.cta2">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Процесс работы -->
     <section id="process">
         <div class="container">
             <div class="section-header">
-                <h2>Как мы будем работать</h2>
-                <p>Прозрачный процесс от обсуждения до запуска</p>
+                <h2 data-key="process.title">Как мы будем работать</h2>
+                <p data-key="process.subtitle">Прозрачный процесс от обсуждения до запуска</p>
             </div>
             
             <div class="process-steps">
                 <div class="step">
-                    <h3>Обсуждение проекта</h3>
-                    <p>Глубокий анализ ваших целей, целевой аудитории и конкурентов. Определяем KPI и ожидаемые результаты.</p>
+                    <h3 data-key="process.step1.title">Обсуждение проекта</h3>
+                    <p data-key="process.step1.description">Глубокий анализ ваших целей, целевой аудитории и конкурентов. Определяем KPI и ожидаемые результаты.</p>
                 </div>
                 
                 <div class="step">
-                    <h3>Прототип и дизайн</h3>
-                    <p>Создаем прототип будущего сайта, утверждаем визуальную концепцию и пользовательский опыт.</p>
+                    <h3 data-key="process.step2.title">Прототип и дизайн</h3>
+                    <p data-key="process.step2.description">Создаем прототип будущего сайта, утверждаем визуальную концепцию и пользовательский опыт.</p>
                 </div>
                 
                 <div class="step">
-                    <h3>Разработка</h3>
-                    <p>Чистый код, адаптивная верстка, интеграция необходимых функций и систем управления.</p>
+                    <h3 data-key="process.step3.title">Разработка</h3>
+                    <p data-key="process.step3.description">Чистый код, адаптивная верстка, интеграция необходимых функций и систем управления.</p>
                 </div>
                 
                 <div class="step">
-                    <h3>Тестирование и запуск</h3>
-                    <p>Тщательное тестирование на всех устройствах, обучение работе с сайтом и запуск проекта.</p>
+                    <h3 data-key="process.step4.title">Тестирование и запуск</h3>
+                    <p data-key="process.step4.description">Тщательное тестирование на всех устройствах, обучение работе с сайтом и запуск проекта.</p>
                 </div>
             </div>
         </div>
@@ -895,8 +1252,8 @@
     <section class="contacts" id="contact">
         <div class="container">
             <div class="section-header">
-                <h2>Давайте работать вместе</h2>
-                <p>Готов обсудить ваш проект и предложить решение</p>
+                <h2 data-key="contact.title">Давайте работать вместе</h2>
+                <p data-key="contact.subtitle">Готов обсудить ваш проект и предложить решение</p>
             </div>
             
             <div class="contact-content">
@@ -906,7 +1263,7 @@
                             <i class="fas fa-phone"></i>
                         </div>
                         <div class="contact-text">
-                            <h4>Телефон</h4>
+                            <h4 data-key="contact.phone.title">Телефон</h4>
                             <p>8 (906) 407-79-99</p>
                         </div>
                     </div>
@@ -916,7 +1273,7 @@
                             <i class="fas fa-envelope"></i>
                         </div>
                         <div class="contact-text">
-                            <h4>Email</h4>
+                            <h4 data-key="contact.email.title">Email</h4>
                             <p>adbold@list.ru</p>
                         </div>
                     </div>
@@ -926,7 +1283,7 @@
                             <i class="fab fa-telegram"></i>
                         </div>
                         <div class="contact-text">
-                            <h4>Telegram</h4>
+                            <h4 data-key="contact.telegram.title">Telegram</h4>
                             <p>@addbold</p>
                         </div>
                     </div>
@@ -936,8 +1293,8 @@
                             <i class="fas fa-clock"></i>
                         </div>
                         <div class="contact-text">
-                            <h4>Время ответа</h4>
-                            <p>В течение 1 часа в рабочее время</p>
+                            <h4 data-key="contact.response.title">Время ответа</h4>
+                            <p data-key="contact.response.description">В течение 1 часа в рабочее время</p>
                         </div>
                     </div>
                 </div>
@@ -945,21 +1302,21 @@
                 <div class="contact-form">
                     <form id="projectForm">
                         <div class="form-group">
-                            <label for="name">Ваше имя</label>
+                            <label for="name" data-key="form.name">Ваше имя</label>
                             <input type="text" id="name" class="form-control" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email" data-key="form.email">Email</label>
                             <input type="email" id="email" class="form-control" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="message">Опишите ваш проект</label>
+                            <label for="message" data-key="form.message">Опишите ваш проект</label>
                             <textarea id="message" class="form-control" required></textarea>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;" data-key="form.submit">
                             <i class="fas fa-rocket"></i> Отправить заявку
                         </button>
                     </form>
@@ -974,7 +1331,7 @@
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>Максим Bold</h3>
-                    <p>Веб-разработчик, создающий сайты которые продают. Специализируюсь на создании современных, адаптивных и высококонверсионных веб-решений.</p>
+                    <p data-key="footer.description">Веб-разработчик, создающий сайты которые продают. Специализируюсь на создании современных, адаптивных и высококонверсионных веб-решений.</p>
                     <div class="social-links">
                         <a href="https://t.me/addbold" class="social-link" target="_blank">
                             <i class="fab fa-telegram"></i>
@@ -989,36 +1346,299 @@
                 </div>
                 
                 <div class="footer-column">
-                    <h3>Услуги</h3>
+                    <h3 data-key="footer.services">Услуги</h3>
                     <ul class="footer-links">
-                        <li><a href="#services">Лендинг "Под ключ"</a></li>
-                        <li><a href="#services">Интернет-магазин</a></li>
-                        <li><a href="#services">Корпоративный сайт</a></li>
-                        <li><a href="#services">Доработка сайтов</a></li>
+                        <li><a href="#services" data-key="services.landing.title">Лендинг "Под ключ"</a></li>
+                        <li><a href="#services" data-key="services.ecommerce.title">Интернет-магазин</a></li>
+                        <li><a href="#services" data-key="services.corporate.title">Корпоративный сайт</a></li>
+                        <li><a href="#services" data-key="footer.services.more">Доработка сайтов</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
-                    <h3>Навигация</h3>
+                    <h3 data-key="footer.navigation">Навигация</h3>
                     <ul class="footer-links">
-                        <li><a href="#home">Главная</a></li>
-                        <li><a href="#about">Обо мне</a></li>
-                        <li><a href="#services">Услуги</a></li>
-                        <li><a href="#process">Процесс</a></li>
-                        <li><a href="#contact">Контакты</a></li>
+                        <li><a href="#home" data-key="nav.home">Главная</a></li>
+                        <li><a href="#about" data-key="nav.about">Обо мне</a></li>
+                        <li><a href="#services" data-key="nav.services">Услуги</a></li>
+                        <li><a href="#process" data-key="nav.process">Процесс</a></li>
+                        <li><a href="#contact" data-key="nav.contact">Контакты</a></li>
                     </ul>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2023 Максим Bold. Все права защищены.</p>
+                <p>&copy; 2023 Максим Bold. <span data-key="footer.rights">Все права защищены.</span></p>
             </div>
         </div>
     </footer>
 
     <script>
+        // Переводы для сайта
+        const translations = {
+            ru: {
+                // Навигация
+                "nav.home": "Главная",
+                "nav.about": "Обо мне",
+                "nav.services": "Услуги",
+                "nav.process": "Процесс",
+                "nav.contact": "Контакты",
+                "nav.cta": "Начать проект",
+                
+                // Герой
+                "hero.badge": "ВЕБ-РАЗРАБОТЧИК",
+                "hero.title": "Создаю сайты, которые <span>продают</span> и <span>конвертируют</span>",
+                "hero.highlight1": "продают",
+                "hero.highlight2": "конвертируют",
+                "hero.subtitle": "Превращаю посетителей в клиентов с помощью современных технологий и психологии продаж. Ваш бизнес заслуживает сайта, который работает 24/7.",
+                "hero.cta1": "Обсудить проект",
+                "hero.cta2": "Смотреть работы",
+                
+                // Обо мне
+                "about.title": "Почему выбирают меня",
+                "about.subtitle": "Не просто разработка, а стратегическое партнерство для роста вашего бизнеса",
+                "about.heading": "Максим - веб-разработчик, который понимает бизнес",
+                "about.text1": "Я создаю не просто красивые сайты, а эффективные инструменты продаж. Каждый проект - это результат глубокого анализа вашей целевой аудитории и конкурентов.",
+                "about.text2": "Использую современный стек технологий: <strong>HTML5, CSS3, JavaScript, SQL</strong> - чтобы ваш сайт был быстрым, безопасным и адаптивным на всех устройствах.",
+                "about.text3": "Мой подход основан на принципах из лучших книг по продажам и маркетингу. Я знаю, как заставить сайт работать на вас, а не просто быть \"визиткой в интернете\".",
+                "about.role": "Веб-разработчик",
+                "about.quote": "\"Моя цель - не просто написать код, а решить вашу бизнес-задачу. Каждый сайт должен приносить результат.\"",
+                "skills.responsive": "Адаптивный дизайн",
+                "skills.conversion": "Конверсия",
+                "stats.availability": "Ваш сайт работает",
+                "stats.responsive": "Адаптивность",
+                "stats.conversion": "Конверсия в среднем",
+                "stats.security": "Проблем с безопасностью",
+                
+                // Услуги
+                "services.title": "Что я предлагаю",
+                "services.subtitle": "Комплексные решения для вашего цифрового присутствия",
+                "services.landing.title": "Лендинг \"Под ключ\"",
+                "services.landing.description": "Одностраничный сайт, который превращает посетителей в клиентов. Идеально для запуска продукта, акции или услуги.",
+                "services.landing.price": "от 3 000 ₽",
+                "services.ecommerce.title": "Интернет-магазин",
+                "services.ecommerce.description": "Полнофункциональная платформа для онлайн-продаж с удобной административной панелью и системой управления товарами.",
+                "services.ecommerce.price": "от 15 000 ₽",
+                "services.corporate.title": "Корпоративный сайт",
+                "services.corporate.description": "Представительство вашей компании в интернете с системой управления контентом и современным дизайном.",
+                "services.corporate.price": "от 10 000 ₽",
+                "services.detail": "Подробнее",
+                
+                // Модальные окна
+                "modals.landing.title": "Лендинг \"Под ключ\"",
+                "modals.landing.subtitle": "Одностраничный сайт для эффективных продаж",
+                "modals.landing.description": "Лендинг — это специализированная страница, созданная для конкретного предложения. Она направляет внимание посетителя на одно целевое действие: заявку, покупку, регистрацию.",
+                "modals.landing.feature1": "Адаптивный дизайн",
+                "modals.landing.feature2": "SEO-оптимизация",
+                "modals.landing.feature3": "Формы обратной связи",
+                "modals.landing.feature4": "Интеграция с CRM",
+                "modals.landing.feature5": "Аналитика и метрики",
+                "modals.landing.feature6": "Гарантия 1 год",
+                "modals.examples": "Примеры работ",
+                "modals.landing.example1": "Бизнес-услуги",
+                "modals.landing.example2": "Образование",
+                "modals.landing.example3": "Медицина",
+                "modals.landing.example4": "Недвижимость",
+                "modals.ecommerce.title": "Интернет-магазин",
+                "modals.ecommerce.subtitle": "Полнофункциональная платформа для онлайн-продаж",
+                "modals.ecommerce.description": "Современный интернет-магазин с системой управления товарами, корзиной, оформлением заказов и интеграцией с платежными системами.",
+                "modals.ecommerce.feature1": "Каталог товаров",
+                "modals.ecommerce.feature2": "Корзина и оформление",
+                "modals.ecommerce.feature3": "Платежные системы",
+                "modals.ecommerce.feature4": "Управление заказами",
+                "modals.ecommerce.feature5": "Личный кабинет",
+                "modals.ecommerce.feature6": "Админ-панель",
+                "modals.corporate.title": "Корпоративный сайт",
+                "modals.corporate.subtitle": "Представительство вашей компании в интернете",
+                "modals.corporate.description": "Многостраничный сайт для представления компании, её услуг, команды и проектов. С системой управления контентом для самостоятельного обновления информации.",
+                "modals.corporate.feature1": "О компании",
+                "modals.corporate.feature2": "Услуги/продукты",
+                "modals.corporate.feature3": "Блог/новости",
+                "modals.corporate.feature4": "Контакты и карта",
+                "modals.corporate.feature5": "Система управления",
+                "modals.corporate.feature6": "Мультиязычность",
+                "modals.cta1": "Обсудить проект",
+                "modals.cta2": "Закрыть",
+                
+                // Процесс
+                "process.title": "Как мы будем работать",
+                "process.subtitle": "Прозрачный процесс от обсуждения до запуска",
+                "process.step1.title": "Обсуждение проекта",
+                "process.step1.description": "Глубокий анализ ваших целей, целевой аудитории и конкурентов. Определяем KPI и ожидаемые результаты.",
+                "process.step2.title": "Прототип и дизайн",
+                "process.step2.description": "Создаем прототип будущего сайта, утверждаем визуальную концепцию и пользовательский опыт.",
+                "process.step3.title": "Разработка",
+                "process.step3.description": "Чистый код, адаптивная верстка, интеграция необходимых функций и систем управления.",
+                "process.step4.title": "Тестирование и запуск",
+                "process.step4.description": "Тщательное тестирование на всех устройствах, обучение работе с сайтом и запуск проекта.",
+                
+                // Контакты
+                "contact.title": "Давайте работать вместе",
+                "contact.subtitle": "Готов обсудить ваш проект и предложить решение",
+                "contact.phone.title": "Телефон",
+                "contact.email.title": "Email",
+                "contact.telegram.title": "Telegram",
+                "contact.response.title": "Время ответа",
+                "contact.response.description": "В течение 1 часа в рабочее время",
+                
+                // Форма
+                "form.name": "Ваше имя",
+                "form.email": "Email",
+                "form.message": "Опишите ваш проект",
+                "form.submit": "Отправить заявку",
+                
+                // Футер
+                "footer.description": "Веб-разработчик, создающий сайты которые продают. Специализируюсь на создании современных, адаптивных и высококонверсионных веб-решений.",
+                "footer.services": "Услуги",
+                "footer.services.more": "Доработка сайтов",
+                "footer.navigation": "Навигация",
+                "footer.rights": "Все права защищены."
+            },
+            en: {
+                // Навигация
+                "nav.home": "Home",
+                "nav.about": "About",
+                "nav.services": "Services",
+                "nav.process": "Process",
+                "nav.contact": "Contact",
+                "nav.cta": "Start Project",
+                
+                // Герой
+                "hero.badge": "WEB DEVELOPER",
+                "hero.title": "I create websites that <span>sell</span> and <span>convert</span>",
+                "hero.highlight1": "sell",
+                "hero.highlight2": "convert",
+                "hero.subtitle": "I turn visitors into customers using modern technologies and sales psychology. Your business deserves a website that works 24/7.",
+                "hero.cta1": "Discuss Project",
+                "hero.cta2": "View Portfolio",
+                
+                // Обо мне
+                "about.title": "Why Choose Me",
+                "about.subtitle": "Not just development, but strategic partnership for your business growth",
+                "about.heading": "Maxim - a web developer who understands business",
+                "about.text1": "I create not just beautiful websites, but effective sales tools. Each project is the result of deep analysis of your target audience and competitors.",
+                "about.text2": "I use modern technology stack: <strong>HTML5, CSS3, JavaScript, SQL</strong> - to make your website fast, secure and responsive on all devices.",
+                "about.text3": "My approach is based on principles from the best sales and marketing books. I know how to make a website work for you, not just be a \"business card on the internet\".",
+                "about.role": "Web Developer",
+                "about.quote": "\"My goal is not just to write code, but to solve your business problem. Every website should deliver results.\"",
+                "skills.responsive": "Responsive Design",
+                "skills.conversion": "Conversion",
+                "stats.availability": "Your site works",
+                "stats.responsive": "Responsiveness",
+                "stats.conversion": "Average conversion",
+                "stats.security": "Security issues",
+                
+                // Услуги
+                "services.title": "What I Offer",
+                "services.subtitle": "Comprehensive solutions for your digital presence",
+                "services.landing.title": "Landing Page \"Turnkey\"",
+                "services.landing.description": "A one-page website that turns visitors into customers. Perfect for product launches, promotions or services.",
+                "services.landing.price": "from $200",
+                "services.ecommerce.title": "E-commerce Store",
+                "services.ecommerce.description": "Full-featured platform for online sales with convenient admin panel and product management system.",
+                "services.ecommerce.price": "from $500",
+                "services.corporate.title": "Corporate Website",
+                "services.corporate.description": "Your company's representation on the internet with content management system and modern design.",
+                "services.corporate.price": "from $350",
+                "services.detail": "Details",
+                
+                // Модальные окна
+                "modals.landing.title": "Landing Page \"Turnkey\"",
+                "modals.landing.subtitle": "One-page website for effective sales",
+                "modals.landing.description": "A landing page is a specialized page created for a specific offer. It directs the visitor's attention to one target action: application, purchase, registration.",
+                "modals.landing.feature1": "Responsive design",
+                "modals.landing.feature2": "SEO optimization",
+                "modals.landing.feature3": "Feedback forms",
+                "modals.landing.feature4": "CRM integration",
+                "modals.landing.feature5": "Analytics and metrics",
+                "modals.landing.feature6": "1 year warranty",
+                "modals.examples": "Work examples",
+                "modals.landing.example1": "Business services",
+                "modals.landing.example2": "Education",
+                "modals.landing.example3": "Medicine",
+                "modals.landing.example4": "Real estate",
+                "modals.ecommerce.title": "E-commerce Store",
+                "modals.ecommerce.subtitle": "Full-featured platform for online sales",
+                "modals.ecommerce.description": "Modern online store with product management system, shopping cart, order processing and payment system integration.",
+                "modals.ecommerce.feature1": "Product catalog",
+                "modals.ecommerce.feature2": "Cart and checkout",
+                "modals.ecommerce.feature3": "Payment systems",
+                "modals.ecommerce.feature4": "Order management",
+                "modals.ecommerce.feature5": "Personal account",
+                "modals.ecommerce.feature6": "Admin panel",
+                "modals.corporate.title": "Corporate Website",
+                "modals.corporate.subtitle": "Your company's online representation",
+                "modals.corporate.description": "Multi-page website for presenting the company, its services, team and projects. With a content management system for independent information updates.",
+                "modals.corporate.feature1": "About company",
+                "modals.corporate.feature2": "Services/products",
+                "modals.corporate.feature3": "Blog/news",
+                "modals.corporate.feature4": "Contacts and map",
+                "modals.corporate.feature5": "Management system",
+                "modals.corporate.feature6": "Multilingual",
+                "modals.cta1": "Discuss project",
+                "modals.cta2": "Close",
+                
+                // Процесс
+                "process.title": "How We Will Work",
+                "process.subtitle": "Transparent process from discussion to launch",
+                "process.step1.title": "Project Discussion",
+                "process.step1.description": "Deep analysis of your goals, target audience and competitors. We define KPIs and expected results.",
+                "process.step2.title": "Prototype and Design",
+                "process.step2.description": "We create a prototype of the future website, approve the visual concept and user experience.",
+                "process.step3.title": "Development",
+                "process.step3.description": "Clean code, responsive layout, integration of necessary functions and management systems.",
+                "process.step4.title": "Testing and Launch",
+                "process.step4.description": "Thorough testing on all devices, training on working with the website and project launch.",
+                
+                // Контакты
+                "contact.title": "Let's Work Together",
+                "contact.subtitle": "Ready to discuss your project and offer a solution",
+                "contact.phone.title": "Phone",
+                "contact.email.title": "Email",
+                "contact.telegram.title": "Telegram",
+                "contact.response.title": "Response time",
+                "contact.response.description": "Within 1 hour during business hours",
+                
+                // Форма
+                "form.name": "Your Name",
+                "form.email": "Email",
+                "form.message": "Describe your project",
+                "form.submit": "Send Request",
+                
+                // Футер
+                "footer.description": "Web developer creating websites that sell. I specialize in creating modern, responsive and high-conversion web solutions.",
+                "footer.services": "Services",
+                "footer.services.more": "Website improvements",
+                "footer.navigation": "Navigation",
+                "footer.rights": "All rights reserved."
+            }
+        };
+
         // Инициализация приложения
         document.addEventListener('DOMContentLoaded', function() {
+            // Определение языка по умолчанию
+            const userLang = navigator.language || navigator.userLanguage;
+            const defaultLang = userLang.startsWith('ru') ? 'ru' : 'en';
+            let currentLang = localStorage.getItem('language') || defaultLang;
+            
+            // Применение языка
+            applyLanguage(currentLang);
+            
+            // Переключатели языка
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.dataset.lang;
+                    applyLanguage(lang);
+                    
+                    // Обновление активной кнопки
+                    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Сохранение выбора
+                    localStorage.setItem('language', lang);
+                });
+            });
+            
             // Плавная прокрутка для навигации
             document.querySelectorAll('.nav-links a, .footer-links a').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -1048,17 +1668,17 @@
             // Копирование контактов
             document.getElementById('phoneContact').addEventListener('click', function() {
                 copyToClipboard('89064077999');
-                showNotification('Номер телефона скопирован!');
+                showNotification(currentLang === 'ru' ? 'Номер телефона скопирован!' : 'Phone number copied!');
             });
             
             document.getElementById('emailContact').addEventListener('click', function() {
                 copyToClipboard('adbold@list.ru');
-                showNotification('Email скопирован!');
+                showNotification(currentLang === 'ru' ? 'Email скопирован!' : 'Email copied!');
             });
             
             document.getElementById('telegramContact').addEventListener('click', function() {
                 copyToClipboard('@addbold');
-                showNotification('Telegram скопирован!');
+                showNotification(currentLang === 'ru' ? 'Telegram скопирован!' : 'Telegram copied!');
             });
             
             // Открытие Telegram
@@ -1067,38 +1687,12 @@
                 window.open('https://t.me/addbold', '_blank');
             });
             
-           // Обработка формы
-document.getElementById('projectForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        message: document.getElementById('message').value
-    };
-    
-    // Отправка в Telegram
-    sendToTelegram(formData);
-    
-    showNotification('Заявка отправлена! Я свяжусь с вами в ближайшее время.');
-    this.reset();
-});
-
-// Функция отправки в Telegram
-function sendToTelegram(data) {
-    const botToken = '8584667039:AAE8FAn7KAmUMiWkmLY3WW9970E5w_Z4Cf8';
-    const chatId = '8474242278';
-    
-    const text = `📧 Новая заявка с сайта:%0A%0A`
-               + `👤 Имя: ${data.name}%0A`
-               + `📧 Email: ${data.email}%0A`
-               + `💬 Сообщение: ${data.message}`;
-    
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${text}&parse_mode=HTML`)
-        .then(response => response.json())
-        .then(data => console.log('Сообщение отправлено в Telegram'))
-        .catch(error => console.error('Ошибка:', error));
-}
+            // Обработка формы
+            document.getElementById('projectForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showNotification(currentLang === 'ru' ? 'Заявка отправлена! Я свяжусь с вами в ближайшее время.' : 'Request sent! I will contact you soon.');
+                this.reset();
+            });
             
             // Кнопки призыва к действию
             document.getElementById('contactBtn').addEventListener('click', function() {
@@ -1110,7 +1704,31 @@ function sendToTelegram(data) {
             });
             
             document.getElementById('portfolioBtn').addEventListener('click', function() {
-                showNotification('Портфолио скоро будет доступно!');
+                window.open('https://t.me/addbold', '_blank');
+            });
+            
+            // Модальные окна для услуг
+            document.querySelectorAll('.service-detail-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const service = this.dataset.service;
+                    openModal(service);
+                });
+            });
+            
+            // Закрытие модальных окон
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    closeModal();
+                });
+            });
+            
+            // Закрытие модального окна при клике вне его
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal();
+                    }
+                });
             });
             
             // Изменение навигации при скролле
@@ -1124,6 +1742,50 @@ function sendToTelegram(data) {
                     nav.style.background = 'rgba(255, 255, 255, 0.95)';
                 }
             });
+            
+           // Функция применения языка
+function applyLanguage(lang) {
+    currentLang = lang;
+    
+    // Обновляем активную кнопку языка
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+    
+    // Применяем переводы ко всем элементам с data-key
+    document.querySelectorAll('[data-key]').forEach(element => {
+        const key = element.dataset.key;
+        if (translations[lang] && translations[lang][key]) {
+            let translation = translations[lang][key];
+            
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                element.placeholder = translation;
+            } else if (translation.includes('<') && translation.includes('>')) {
+                // Если перевод содержит HTML теги
+                element.innerHTML = translation;
+            } else {
+                // Обычный текст
+                element.textContent = translation;
+            }
+        }
+    });
+}
+            // Функция открытия модального окна
+            function openModal(service) {
+                const modal = document.getElementById(`${service}-modal`);
+                if (modal) {
+                    modal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+            
+            // Функция закрытия модального окна
+            function closeModal() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+                document.body.style.overflow = 'auto';
+            }
             
             // Функция копирования в буфер обмена
             function copyToClipboard(text) {
@@ -1181,3 +1843,5 @@ function sendToTelegram(data) {
     </script>
 </body>
 </html>
+</html>
+
