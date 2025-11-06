@@ -1687,12 +1687,139 @@
                 window.open('https://t.me/addbold', '_blank');
             });
             
-            // Обработка формы
-            document.getElementById('projectForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                showNotification(currentLang === 'ru' ? 'Заявка отправлена! Я свяжусь с вами в ближайшее время.' : 'Request sent! I will contact you soon.');
-                this.reset();
-            });
+          // УДАЛИ старый код с BOT_TOKEN и вставь этот:
+
+// Конфигурация Telegram бота
+const BOT_CONFIG = {
+    token: '8584667039:AAE8FAn7KAmUMiWkmLY3WW9970E5w_Z4Cf8', // ЗАМЕНИ на свой токен
+    chatId: '8474242278' // ЗАМЕНИ на свой chat_id
+};
+
+// Обработка формы
+document.getElementById('projectForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Показываем уведомление сразу
+    showNotification('Отправляем заявку...');
+    
+    const formData = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        message: document.getElementById('message').value.trim(),
+        timestamp: new Date().toLocaleString('ru-RU')
+    };
+    
+    // Валидация
+    if (!formData.name || !formData.email || !formData.message) {
+        showNotification('Заполните все поля!');
+        return;
+    }
+    
+    // Отправка в Telegram
+    sendToTelegram(formData);
+});
+
+// Функция отправки в Telegram
+function sendToTelegram(data) {
+    const text = `📧 <b>Новая заявка с сайта</b>%0A%0A`
+               + `👤 <b>Имя:</b> ${data.name}%0A`
+               + `📧 <b>Email:</b> ${data.email}%0A`
+               + `💬 <b>Сообщение:</b> ${data.message}%0A`
+               + `🕐 <b>Время:</b> ${data.timestamp}`;
+
+    const url = `https://api.telegram.org/bot${BOT_CONFIG.token}/sendMessage?chat_id=${BOT_CONFIG.chatId}&text=${text}&parse_mode=HTML`;
+    
+    fetch(url)
+        .then(response => {
+            if (response.ok) {
+                showNotification('✅ Заявка отправлена! Свяжусь с вами в ближайшее время.');
+                document.getElementById('projectForm').reset();
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка отправки:', error);
+            showNotification('❌ Ошибка отправки. Попробуйте позже.');
+        });
+}
+
+// Функция показа уведомлений
+function showNotification(message) {
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: var(--primary);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideInRight 0.3s ease;
+        font-weight: 500;
+        max-width: 300px;
+    `;
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 4000);
+}
+
+// Добавляем стили для анимации уведомления
+if (!document.querySelector('#notification-styles')) {
+    const notificationStyle = document.createElement('style');
+    notificationStyle.id = 'notification-styles';
+    notificationStyle.textContent = `
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(notificationStyle);
+}
+
+// Исправление кнопки "Начать проект" в шапке
+document.getElementById('contactBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        window.scrollTo({
+            top: contactSection.offsetTop - 80,
+            behavior: 'smooth'
+        });
+    }
+});
+
+// Исправление кнопки "Обсудить проект" в герое
+document.getElementById('heroContactBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        window.scrollTo({
+            top: contactSection.offsetTop - 80,
+            behavior: 'smooth'
+        });
+    }
+});
             
             // Кнопки призыва к действию
             document.getElementById('contactBtn').addEventListener('click', function() {
@@ -1843,5 +1970,3 @@ function applyLanguage(lang) {
     </script>
 </body>
 </html>
-</html>
-
